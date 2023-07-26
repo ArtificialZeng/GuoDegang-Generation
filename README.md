@@ -7,8 +7,8 @@ Crosstalk Generator for *Natural Language Processing* 2019 Fall @ Fudan Universi
   * [/code/main.py](./code/main.py)
     * [main.py](./code/main.py)
     * [train.sh参数解释](./ptuning/train.sh) 
-  * [x.py](./src/train_sft.py)
-* [x/](./examples)
+  * [/data/pre.py](/data/pre.py)
+* [/data/pre.py](./examples)
   * [x.md](./examples/ads_generation.md)
 * [README.md](./README.md)
 
