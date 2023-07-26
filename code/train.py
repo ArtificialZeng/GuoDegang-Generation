@@ -216,26 +216,28 @@ def trainIters(corpus, reverse, n_iteration, learning_rate, batch_size, n_layers
 	start_iteration = checkpoint['iteration'] + 1
 	perplexity = checkpoint['plt']
 
+    for iteration in tqdm(range(start_iteration, n_iteration + 1)):  # 使用tqdm库创建一个进度条，并按照设定的迭代次数进行迭代。
+        training_batch = training_batches[iteration - 1]  # 从训练批次列表中获取当前批次的数据。
+        input_variable, lengths, target_variable, mask, max_target_len = training_batch  # 从当前批次的数据中获取输入变量、长度、目标变量、掩码和最大目标长度。
 
-    for iteration in tqdm(range(start_iteration, n_iteration + 1)):
-        training_batch = training_batches[iteration - 1]
-        input_variable, lengths, target_variable, mask, max_target_len = training_batch
-
+        # 调用train函数进行训练，并得到训练的损失。
         loss = train(input_variable, lengths, target_variable, mask, max_target_len, encoder,
-                     decoder, embedding, encoder_optimizer, decoder_optimizer, batch_size)
-        print_loss += loss
-        perplexity.append(loss)
+                    decoder, embedding, encoder_optimizer, decoder_optimizer, batch_size)
+        print_loss += loss  # 将损失加入到打印的损失中。
+        perplexity.append(loss)  # 将损失加入到困惑度列表中。
 
+        # 如果当前迭代次数可以被设置的打印频率整除，那么就计算平均损失并打印出来。
         if iteration % print_every == 0:
             print_loss_avg = math.exp(print_loss / print_every)
             print('%d %d%% %.4f' % (iteration, iteration / n_iteration * 100, print_loss_avg))
-            print_loss = 0
+            print_loss = 0  # 打印完平均损失后，重置打印的损失。
 
+        # 如果当前迭代次数可以被设置的保存频率整除，那么就保存模型和优化器的状态，以及损失和困惑度。
         if (iteration % save_every == 0):
-            directory = os.path.join(save_dir, 'model', corpus_name, '{}-{}_{}'.format(n_layers, n_layers, hidden_size))
-            if not os.path.exists(directory):
+            directory = os.path.join(save_dir, 'model', corpus_name, '{}-{}_{}'.format(n_layers, n_layers, hidden_size))  # 定义保存目录的路径。
+            if not os.path.exists(directory):  # 如果保存目录不存在，就创建它。
                 os.makedirs(directory)
-            torch.save({
+            torch.save({  # 使用torch.save函数保存模型和优化器的状态，以及损失和困惑度。
                 'iteration': iteration,
                 'en': encoder.state_dict(),
                 'de': decoder.state_dict(),
