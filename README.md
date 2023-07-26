@@ -1,4 +1,4 @@
-# Crosstalk-Generation
+# GuoDegang-Crosstalk-Generation
 
 
 Crosstalk Generator for *Natural Language Processing* 2019 Fall @ Fudan University, by  [**Zuobai Zhang**](<https://oxer11.github.io/>)
