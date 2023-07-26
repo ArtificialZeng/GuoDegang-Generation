@@ -1,5 +1,5 @@
 # Crosstalk-Generation
-![demo](README.asset/gy_wc.png)
+
 
 Crosstalk Generator for *Natural Language Processing* 2019 Fall @ Fudan University, by  [**Zuobai Zhang**](<https://oxer11.github.io/>)
 
@@ -169,3 +169,5 @@ python main.py -te ./save/model/crosstalk_peng/2-2_256/10000_backup_bidir_model.
 捧： 阿 ？ 好 嘛 ， 哪 年代 的 事儿 了 ？ ？ ！ 您 这
 # 怕不是吃错了药...
 ```
+
+![demo](README.asset/gy_wc.png)
