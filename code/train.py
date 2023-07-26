@@ -246,3 +246,4 @@ def trainIters(corpus, reverse, n_iteration, learning_rate, batch_size, n_layers
                 'loss': loss,
                 'plt': perplexity
             }, os.path.join(directory, '{}_{}.tar'.format(iteration, filename(reverse, 'backup_bidir_model'))))
+
