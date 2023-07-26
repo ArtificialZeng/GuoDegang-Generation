@@ -3,6 +3,15 @@
 
 Crosstalk Generator for *Natural Language Processing* 2019 Fall @ Fudan University, by  [**Zuobai Zhang**](<https://oxer11.github.io/>)
 
+* [x/](./src)
+  * [/code/main.py](./code/main.py)
+    * [main.py](./code/main.py)
+    * [train.sh参数解释](./ptuning/train.sh) 
+  * [x.py](./src/train_sft.py)
+* [x/](./examples)
+  * [x.md](./examples/ads_generation.md)
+* [README.md](./README.md)
+
 ## Tree sructure
 ```
 ├── Crosstalk-Generation
