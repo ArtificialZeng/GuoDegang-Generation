@@ -25,31 +25,32 @@ def parse():
     args = parser.parse_args()
     return args
 
-def parseFilename(filename, test=False):
-    filename = filename.split('/')
-    dataType = filename[-1][:-4] # remove '.tar'
-    parse = dataType.split('_')
-    reverse = 'reverse' in parse
-    layers, hidden = filename[-2].split('_')
-    n_layers = int(layers.split('-')[0])
-    hidden_size = int(hidden)
-    return n_layers, hidden_size, reverse
+def parseFilename(filename, test=False):  # 定义一个函数 parseFilename，这个函数接受两个参数，一个是filename（文件名），另一个是test，test的默认值为False。
+    filename = filename.split('/')  # 将输入的文件名按照"/"进行分割，返回一个包含分割后元素的列表。
+    dataType = filename[-1][:-4]  # 从列表filename中取最后一个元素的前四个字符（即从开始到倒数第四个字符）并赋值给变量dataType。
+    parse = dataType.split('_')  # 将dataType字符串按照 "_" 进行分割，返回一个包含分割后元素的列表。
+    reverse = 'reverse' in parse  # 判断'reverse'是否在parse列表中，如果在，则返回True，否则返回False。
+    layers, hidden = filename[-2].split('_')  # 从列表filename中取倒数第二个元素，并按 "_" 进行分割，然后将分割后的两个元素分别赋值给变量layers和hidden。
+    n_layers = int(layers.split('-')[0])  # 将layers按 "-" 分割，取出第一个元素，并转换为整数，然后赋值给变量n_layers。
+    hidden_size = int(hidden)  # 将hidden转换为整数，然后赋值给变量hidden_size。
+    return n_layers, hidden_size, reverse  # 返回三个变量：n_layers，hidden_size和reverse。
 
-def run(args):
+def run(args):  # 定义一个函数run，这个函数接受一个参数args。
     reverse, fil, n_iteration, print_every, save_every, learning_rate, \
         n_layers, hidden_size, batch_size, beam_size, inp, dropout = \
         args.reverse, args.filter, args.iteration, args.print, args.save, args.learning_rate, \
-        args.layer, args.hidden, args.batch_size, args.beam, args.input, args.dropout
-    if args.train and not args.load:
+        args.layer, args.hidden, args.batch_size, args.beam, args.input, args.dropout  # 这一行通过一次性解包args对象的各属性值，将其赋值给对应的变量。
+    if args.train and not args.load:  # 如果args对象的train属性为True，并且load属性为False，则执行下一行代码。
         trainIters(args.train, reverse, n_iteration, learning_rate, batch_size,
-                    n_layers, hidden_size, print_every, save_every, dropout)
-    elif args.load:
-        n_layers, hidden_size, reverse = parseFilename(args.load)
+                    n_layers, hidden_size, print_every, save_every, dropout)  # 调用trainIters函数，传入args.train, reverse, n_iteration, learning_rate, batch_size, n_layers, hidden_size, print_every, save_every, dropout作为参数。
+    elif args.load:  # 如果args对象的load属性为True，则执行下一行代码。
+        n_layers, hidden_size, reverse = parseFilename(args.load)  # 调用parseFilename函数，传入args.load作为参数，并将返回的三个值分别赋值给n_layers, hidden_size, reverse。
         trainIters(args.train, reverse, n_iteration, learning_rate, batch_size,
-                    n_layers, hidden_size, print_every, save_every, dropout, loadFilename=args.load)
-    elif args.test:
-        n_layers, hidden_size, reverse = parseFilename(args.test, True)
-        runTest(n_layers, hidden_size, reverse, args.test, beam_size, inp, args.corpus)
+                    n_layers, hidden_size, print_every, save_every, dropout, loadFilename=args.load)  # 调用trainIters函数，传入args.train, reverse, n_iteration, learning_rate, batch_size, n_layers, hidden_size, print_every, save_every, dropout, args.load作为参数。
+    elif args.test:  # 如果args对象的test属性为True，则执行下一行代码。
+        n_layers, hidden_size, reverse = parseFilename(args.test, True)  # 调用parseFilename函数，传入args.test和True作为参数，并将返回的三个值分别赋值给n_layers, hidden_size, reverse。
+        runTest(n_layers, hidden_size, reverse, args.test, beam_size, inp, args.corpus)  # 调用runTest函数，传入n_layers, hidden_size, reverse, args.test, beam_size, inp, args.corpus作为参数。
+
 
 
 if __name__ == '__main__':
