@@ -3,6 +3,107 @@
 
 Crosstalk Generator for *Natural Language Processing* 2019 Fall @ Fudan University, by  [**Zuobai Zhang**](<https://oxer11.github.io/>)
 
+## Tree sructure
+```
+├── Crosstalk-Generation
+│   ├── README.asset
+│   │   └── gy_wc.png
+│   ├── README.md
+│   ├── code
+│   │   ├── config.py
+│   │   ├── data
+│   │   │   └── crosstalk_peng.txt
+│   │   ├── evaluate.py
+│   │   ├── load.py
+│   │   ├── main.py
+│   │   ├── model.py
+│   │   └── train.py
+│   ├── data
+│   │   ├── analyzer.ipynb
+│   │   ├── crosstalk
+│   │   │   ├── 郭德纲 李菁《论梦》相声文本.txt
+│   │   │   ├── 郭德纲 张文顺《赌论》相声文本.txt
+│   │   │   ├── 郭德纲 李菁《卖五器》相声文本.txt
+│   │   │   ├── ...
+│   │   ├── crosstalk_dirty
+│   │   │   ├── 1.txt
+│   │   │   ├── 10.txt
+│   │   │   ├── 11.txt
+│   │   │   ├...
+│   │   └── pre.py
+│   └── doc
+│       ├── PJ.bib
+│       ├── figure
+│       │   ├── attention.png
+│       │   ├── conv1.png
+│       │   ├── gdg.png
+│       │   ├── gdg1.png
+│       │   ├── gdg_wc.png
+│       │   ├── gy_wc.png
+│       │   ├── loc_wc.png
+│       │   ├── luke1.png
+│       │   ├── luke2.png
+│       │   ├── luke_wc.png
+│       │   ├── luke_wc1.png
+│       │   ├── name_wc.png
+│       │   ├── seg.png
+│       │   ├── seq2seq.png
+│       │   ├── yq1.png
+│       │   ├── yq_wc.png
+│       │   └── yq_z.png
+│       ├── report.pdf
+│       └── report.tex
+├── GuoDegang-Generation
+│   ├── README.asset
+│   │   └── gy_wc.png
+│   ├── README.md
+│   ├── code
+│   │   ├── config.py
+│   │   ├── data
+│   │   │   └── crosstalk_peng.txt
+│   │   ├── evaluate.py
+│   │   ├── load.py
+│   │   ├── main.py
+│   │   ├── model.py
+│   │   └── train.py
+│   ├── data
+│   │   ├── analyzer.ipynb
+│   │   ├── crosstalk
+│   │   │   ├── 郭德纲 李菁《论梦》相声文本.txt
+│   │   │   ├── 郭德纲 张文顺《赌论》相声文本.txt
+│   │   │   ├── 郭德纲 李菁《卖五器》相声文本.txt
+│   │   │   ├── ...
+│   │   ├── crosstalk_dirty
+│   │   │   ├── 1.txt
+│   │   │   ├── 10.txt
+│   │   │   ├── 11.txt
+│   │   │   ├── 12.txt
+│   │   │   ...
+│   │   └── pre.py
+│   └── doc
+│       ├── PJ.bib
+│       ├── figure
+│       │   ├── attention.png
+│       │   ├── conv1.png
+│       │   ├── gdg.png
+│       │   ├── gdg1.png
+│       │   ├── gdg_wc.png
+│       │   ├── gy_wc.png
+│       │   ├── loc_wc.png
+│       │   ├── luke1.png
+│       │   ├── luke2.png
+│       │   ├── luke_wc.png
+│       │   ├── luke_wc1.png
+│       │   ├── name_wc.png
+│       │   ├── seg.png
+│       │   ├── seq2seq.png
+│       │   ├── yq1.png
+│       │   ├── yq_wc.png
+│       │   └── yq_z.png
+│       ├── report.pdf
+│       └── report.tex
+└── directory_structure.md
+```
 ## What's this
 
 *Crosstalk(相声)* is a traditional Chinese comedic performance in the form of a dialogue. The language, rich in puns and allusions, is used in a rapid, bantering style. Crosstalk is one of China's foremost performing arts. Usually, *the main joker(逗哏)* make the audience laugh with words or expressions and *the assistant joker(捧哏)* plays the supporting role of a crosstalk. In this project, we trained a dialogue model to imitate a well-know crosstalk comedian, Qian Yu's speaking style. The code is adapted from [this repo](<https://github.com/ywk991112/pytorch-chatbot>).
