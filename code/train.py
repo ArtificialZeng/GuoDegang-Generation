@@ -145,56 +145,77 @@ def train(input_variable, lengths, target_variable, mask, max_target_len, encode
 
 def trainIters(corpus, reverse, n_iteration, learning_rate, batch_size, n_layers, hidden_size,
                 print_every, save_every, dropout, loadFilename=None, attn_model='dot', decoder_learning_ratio=5.0):
+    # 定义一个名为 `trainIters` 的函数，它接受很多参数，主要用于训练一个神经网络模型。
 
     voc, pairs = loadPrepareData(corpus)
+    # 调用 `loadPrepareData` 函数，用于加载并预处理给定语料库中的数据，并返回词汇表（vocabulary）对象和句子对。
 
     # training data
     corpus_name = os.path.split(corpus)[-1].split('.')[0]
+    # 通过操作系统路径的处理方法获取语料库的名称。
+
     training_batches = None
+    # 初始化 `training_batches` 为 None。`training_batches` 将用于保存训练数据。
+
     try:
+        # 在 `try` 语句块中，试图加载已经保存的训练数据。
         training_batches = torch.load(os.path.join(save_dir, 'training_data', corpus_name,
                                                    '{}_{}_{}.tar'.format(n_iteration, \
                                                                          filename(reverse, 'training_batches'), \
                                                                          batch_size)))
     except FileNotFoundError:
+        # 如果在上述路径未找到训练数据文件，则执行 `except` 块中的代码。
+
         print('Training pairs not found, generating ...')
+        # 输出一个消息，表明正在生成训练对。
+
         training_batches = [batch2TrainData(voc, [random.choice(pairs) for _ in range(batch_size)], reverse)
                           for _ in range(n_iteration)]
+        # 使用 `batch2TrainData` 函数生成新的训练数据。这个过程中，会从所有句子对中随机选择出指定数量的句子对，并按照指定的批量大小生成训练数据。
+
         torch.save(training_batches, os.path.join(save_dir, 'training_data', corpus_name,
                                                   '{}_{}_{}.tar'.format(n_iteration, \
                                                                         filename(reverse, 'training_batches'), \
                                                                         batch_size)))
+        # 将生成的训练数据保存在指定的路径。
+
     # model
-    checkpoint = None
-    print('Building encoder and decoder ...')
-    embedding = nn.Embedding(voc.n_words, hidden_size)
-    encoder = EncoderRNN(voc.n_words, hidden_size, embedding, n_layers, dropout)
-    attn_model = 'dot'
-    decoder = LuongAttnDecoderRNN(attn_model, embedding, hidden_size, voc.n_words, n_layers, dropout)
-    if loadFilename:
-        checkpoint = torch.load(loadFilename)
-        encoder.load_state_dict(checkpoint['en'])
-        decoder.load_state_dict(checkpoint['de'])
+    # model
+    checkpoint = None  # 初始化一个变量 `checkpoint`，它可能会用来存储模型的状态。
+    print('Building encoder and decoder ...')  # 输出一个消息，表明正在构建编码器和解码器。
+    embedding = nn.Embedding(voc.n_words, hidden_size)  # 创建一个嵌入层，其输入维度为词汇表的大小，输出维度为隐藏层的大小。
+    encoder = EncoderRNN(voc.n_words, hidden_size, embedding, n_layers, dropout)  # 使用`EncoderRNN`类构建一个编码器。
+    attn_model = 'dot'  # 设置注意力模型的类型为 'dot'。
+    decoder = LuongAttnDecoderRNN(attn_model, embedding, hidden_size, voc.n_words, n_layers, dropout)  # 使用`LuongAttnDecoderRNN`类构建一个解码器。
+	
+    if loadFilename:  # 如果提供了 `loadFilename`，则从该路径加载模型的状态，并将状态加载到编码器和解码器中。
+	checkpoint = torch.load(loadFilename)
+	encoder.load_state_dict(checkpoint['en'])
+	decoder.load_state_dict(checkpoint['de'])
+	
     # use cuda
-    encoder = encoder.to(device)
-    decoder = decoder.to(device)
-
+    encoder = encoder.to(device)  # 将编码器放置到指定的设备上（CPU或者GPU）。
+    decoder = decoder.to(device)  # 将解码器放置到指定的设备上（CPU或者GPU）。
+	
     # optimizer
-    print('Building optimizers ...')
-    encoder_optimizer = optim.Adam(encoder.parameters(), lr=learning_rate)
-    decoder_optimizer = optim.Adam(decoder.parameters(), lr=learning_rate * decoder_learning_ratio)
-    if loadFilename:
-        encoder_optimizer.load_state_dict(checkpoint['en_opt'])
-        decoder_optimizer.load_state_dict(checkpoint['de_opt'])
-
+    print('Building optimizers ...')  # 输出一个消息，表明正在构建优化器。
+    encoder_optimizer = optim.Adam(encoder.parameters(), lr=learning_rate)  # 对编码器创建一个Adam优化器。
+    decoder_optimizer = optim.Adam(decoder.parameters(), lr=learning_rate * decoder_learning_ratio)  # 对解码器创建一个Adam优化器。
+	
+    if loadFilename:  # 如果提供了 `loadFilename`，则从checkpoint中加载优化器的状态，并将状态加载到编码器和解码器的优化器中。
+	encoder_optimizer.load_state_dict(checkpoint['en_opt'])
+	decoder_optimizer.load_state_dict(checkpoint['de_opt'])
+	
     # initialize
-    print('Initializing ...')
-    start_iteration = 1
-    perplexity = []
-    print_loss = 0
-    if loadFilename:
-        start_iteration = checkpoint['iteration'] + 1
-        perplexity = checkpoint['plt']
+    print('Initializing ...')  # 输出一个消息，表明正在进行初始化操作。
+    start_iteration = 1  # 初始化开始的迭代次数为1。
+    perplexity = []  # 初始化困惑度为一个空列表。
+    print_loss = 0  # 初始化打印的损失为0。
+	
+    if loadFilename:  # 如果提供了 `loadFilename`，则从checkpoint中加载开始的迭代次数和困惑度。
+	start_iteration = checkpoint['iteration'] + 1
+	perplexity = checkpoint['plt']
+
 
     for iteration in tqdm(range(start_iteration, n_iteration + 1)):
         training_batch = training_batches[iteration - 1]
